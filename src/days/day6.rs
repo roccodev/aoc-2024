@@ -1,5 +1,4 @@
 use fxhash::FxHashSet;
-use itertools::Itertools;
 
 pub struct Input {
     pos: (isize, isize),

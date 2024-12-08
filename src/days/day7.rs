@@ -46,13 +46,18 @@ pub fn part1(input: &[Line]) -> i64 {
 
 #[aoc(day7, part2)]
 pub fn part2(input: &[Line]) -> i64 {
+    let mut perms = vec![vec![]; input.iter().map(|l| l.values.len()).max().unwrap()];
+    for i in 0..perms.len() {
+        perms[i] = std::iter::repeat_n([Operation::Add, Operation::Multiply, Operation::Concat], i)
+            .multi_cartesian_product()
+            .collect_vec();
+    }
     input
         .iter()
         .filter(|l| {
-            std::iter::repeat([Operation::Add, Operation::Multiply, Operation::Concat])
-                .take(l.values.len() - 1)
-                .multi_cartesian_product()
-                .any(|assign| solve(l, &assign) == l.result)
+            perms[l.values.len() - 1]
+                .iter()
+                .any(|assign| solve(l, assign) == l.result)
         })
         .map(|l| l.result)
         .sum()
